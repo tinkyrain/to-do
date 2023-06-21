@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+main{
+    width: 100%;
+    height: auto;
+}
+
+.task-section{
+    width: 100%;
+    height: auto;
+}
+
+.input-task{
+    width: 60%;
+    margin: 0 auto;
+}
+
+.task-block{
+    margin: 30px auto;
+
+    width: 60%;
+    height: auto;
+
+    border: 2px solid #aaa;
+    border-radius: 10px; 
+
+    cursor: pointer;
+    transition: all 0.5s ease 0s;
+}
+
+.task-block:hover{
+    border: 2px solid red;
+    background-color: rgb(252, 55, 55);
+    color: white;
+    transition: all 0.5s ease 0s;
+}
+
+.text-task{
+    text-align: center;
+}

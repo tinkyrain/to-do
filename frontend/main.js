@@ -5,21 +5,22 @@ $(document).ready(function(){
     displayAllTasks();
 
     $('#createTask').click(function(){
-        if($.trim($('#task-input').val) != ''){
+        //Checking if a field is empty
+        if($.trim($('#task-input').val()) != ''){
             //Function for creating a task in the database
             createTask();
             //Clear field 
             $('#task-input').val('');
             return false;
         } else {
-            alert('Enter input');
+            alert('Enter the task in the field!');
         }
     });
 });
 
 function createTask(){
     $.ajax({
-        url: '../backend/create.php',
+        url: 'backend/create.php',
         type: "POST",
         dataType: "html",
         data: $('#createForm').serialize(),
@@ -38,7 +39,7 @@ function createTask(){
 //Description of the function for displaying all tasks from the database
 function displayAllTasks(){
     $.ajax({
-        url: "../backend/displayAll.php",
+        url: "backend/displayAll.php",
         type: "POST",
         dataType: 'json',
 
@@ -67,6 +68,7 @@ function displayAllTasks(){
         },
 
         error: function(response){
+            console.log(response);
             alert('Error update');
         }
     });
@@ -78,7 +80,7 @@ function deleteTask(obj){
     let id = $(obj).data('id');
 
     $.ajax({
-        url: '../backend/delete.php',
+        url: 'backend/delete.php',
         type: 'POST',
         data: {Id: id},
         success: function(data){

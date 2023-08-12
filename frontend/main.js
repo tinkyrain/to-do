@@ -1,95 +1,107 @@
 const taskSection = document.getElementById('task-section');
+const addBtn = document.getElementById('createTask');
+const inputTask = document.getElementById('task-input');
 
-$(document).ready(function(){
-    //Display all tasks on the screen
+
+//После загрузки страницы все задачи пользователя появятся на экране
+document.addEventListener('DOMContentLoaded', () => {
     displayAllTasks();
-
-    $('#createTask').click(function(){
-        //Checking if a field is empty
-        if($.trim($('#task-input').val()) != ''){
-            //Function for creating a task in the database
-            createTask();
-            //Clear field 
-            $('#task-input').val('');
-            return false;
-        } else {
-            alert('Enter the task in the field!');
-        }
-    });
 });
 
+//При клике на 'Add' произойдёт вызов функции создания
+addBtn.onclick = function(e){
+
+    //Отключение перезагрузки страницы
+    e.preventDefault();
+
+    //Если поле не пустое, то вызываем функцию создания и чистим поле
+    //Иначе выводим сообщение о том, что поле пустое
+    if(inputTask.value.trim() != ''){
+        createTask(e);
+        inputTask.value = '';
+    } else {
+        alert('Enter the task in the field!');
+    }
+}    
+
+//Функция создания сообщения
 function createTask(){
-    $.ajax({
-        url: 'backend/create.php',
-        type: "POST",
-        dataType: "html",
-        data: $('#createForm').serialize(),
 
-        success: function(response){
-            //Data display
+    //Данные, которые будем отправлять в запросе
+    const params = new FormData();
+    params.set('task', inputTask.value);
+
+
+    //Запрос на бэк
+    fetch('backend/create.php', {
+        method: 'POST',
+        body: params,
+    }).then((response) => {
+        return response.text();
+    }).then((data) => {
+        if(data == 1){
+            //Обновляем список задач
             displayAllTasks();
-        },
-
-        error: function(response){
+        } else {
+            //При неудаче выводим сообщение об ошибке
             alert('Error create');
         }
     });
 }
 
-//Description of the function for displaying all tasks from the database
+//Функция отображения всех задач
 function displayAllTasks(){
-    $.ajax({
-        url: "backend/displayAll.php",
-        type: "POST",
+
+    //Запрос на бек
+    fetch('backend/displayAll.php', {
+        method: 'POST',
         dataType: 'json',
+    }).then((response) => {
+        return response.json();
+    }).then((data) => {
+        //Чистим список задач
+        taskSection.innerHTML = '';
 
-        success: function(response){
-            //Clearing the section where the tasks will be
-            $('.task-section').html(``);
-
-            if(response.length > 0){
-                //Display all tasks, if any
-                for(let i=0;i<response.length;i++){
-                    //Inserting HTML text into a section
-                    taskSection.innerHTML += `
-                        <div class="task-block" data-id="${response[i].id}" onclick='deleteTask(this)'>
-                            <h3 class="text-task fw-light">${response[i].task}</h3>
-                        </div>
-                    `;
-                }
-
-            } else {
-                //Display alternative text if there are no tasks
-                $('.task-section').html(`
-                    <h3 class="text-center text-muted mt-5">Enter your first task in the field!</h3>
-                `);
-
+        //Если задачи есть, то выводим их на экран
+        //Если нет, то выводим информационное сообщение
+        if(data.length > 0){
+            for(let i=0;i<data.length;i++){
+                taskSection.innerHTML += `
+                    <div class="task-block" data-id="${data[i].id}" onclick='deleteTask(this)'>
+                        <h3 class="text-task fw-light">${data[i].task}</h3>
+                    </div>
+                `;
             }
-        },
-
-        error: function(response){
-            console.log(response);
-            alert('Error update');
+        } else {
+            taskSection.innerHTML = `
+                <h3 class="text-center text-muted mt-5">Enter your first task in the field!</h3>
+            `
         }
     });
 }
 
-//Delete Tasks
+//Удаление задач
 function deleteTask(obj){
-    //Getting the ID of the element (ID matches the database)
-    let id = $(obj).data('id');
+    //Получение id задачи
+    let id = obj.dataset.id;
 
-    $.ajax({
-        url: 'backend/delete.php',
-        type: 'POST',
-        data: {Id: id},
-        success: function(data){
-            if(data == 1){
-                //Updating the tasks list
-                displayAllTasks();
-            } else {
-                alert(`Error delete`);
-            }
+    //Параметры, которые будем передавать в запросе
+    const params = new FormData();
+    params.set('Id', id);
+
+    //Запрос на бек
+    fetch('backend/delete.php', {
+        method: 'POST',
+        body: params,
+    }).then((response) => {
+        return response.text();
+    }).then((data) => {
+        if(data == 1){
+            //Показываем все задачи
+            displayAllTasks();
+        } else {
+            //В случае неудачи выводим сообщение об ошибке
+            alert(`Error delete`);
         }
     });
 }

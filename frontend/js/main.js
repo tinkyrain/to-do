@@ -20,7 +20,7 @@ addBtn.onclick = function(e){
         createTask(e);
         inputTask.value = '';
     } else {
-        alert('Enter the task in the field!');
+        alert('Заполните поле!');
     }
 }    
 
@@ -33,7 +33,7 @@ function createTask(){
 
 
     //Запрос на бэк
-    fetch('backend/create.php', {
+    fetch('../../backend/todo/create.php', {
         method: 'POST',
         body: params,
     }).then((response) => {
@@ -44,16 +44,15 @@ function createTask(){
             displayAllTasks();
         } else {
             //При неудаче выводим сообщение об ошибке
-            alert('Error create');
+            alert('Ошибка создания задачи!');
         }
     });
 }
 
 //Функция отображения всех задач
 function displayAllTasks(){
-
     //Запрос на бек
-    fetch('backend/displayAll.php', {
+    fetch('../../backend/todo/displayAll.php', {
         method: 'POST',
         dataType: 'json',
     }).then((response) => {
@@ -74,7 +73,7 @@ function displayAllTasks(){
             }
         } else {
             taskSection.innerHTML = `
-                <h3 class="text-center text-muted mt-5">Enter your first task in the field!</h3>
+                <h3 class="text-center text-muted mt-5">Создайте свою первую задачу!</h3>
             `
         }
     });
@@ -90,7 +89,7 @@ function deleteTask(obj){
     params.set('Id', id);
 
     //Запрос на бек
-    fetch('backend/delete.php', {
+    fetch('../../backend/todo/delete.php', {
         method: 'POST',
         body: params,
     }).then((response) => {
@@ -101,8 +100,19 @@ function deleteTask(obj){
             displayAllTasks();
         } else {
             //В случае неудачи выводим сообщение об ошибке
-            alert(`Error delete`);
+            alert(`Ошибка удаления задачи!`);
         }
     });
 }
 
+//Выход из аккаунта
+function out(){
+    //Запрос на бек
+    fetch('../../backend/auth/out.php', {
+        method: 'POST',
+    }).then(() => {
+        window.location.href = '../../index.php';
+    });
+}
+
+document.getElementById('outAccount').onclick = out;

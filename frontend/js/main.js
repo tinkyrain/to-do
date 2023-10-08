@@ -2,7 +2,6 @@ const taskSection = document.getElementById('task-section');
 const addBtn = document.getElementById('createTask');
 const inputTask = document.getElementById('task-input');
 
-
 //После загрузки страницы все задачи пользователя появятся на экране
 document.addEventListener('DOMContentLoaded', () => {
     displayAllTasks();
@@ -16,7 +15,7 @@ addBtn.onclick = function(e){
 
     //Если поле не пустое, то вызываем функцию создания и чистим поле
     //Иначе выводим сообщение о том, что поле пустое
-    if(inputTask.value.trim() != ''){
+    if(inputTask.value.trim() !== ''){
         createTask(e);
         inputTask.value = '';
     } else {
@@ -104,15 +103,3 @@ function deleteTask(obj){
         }
     });
 }
-
-//Выход из аккаунта
-function out(){
-    //Запрос на бек
-    fetch('../../backend/auth/out.php', {
-        method: 'POST',
-    }).then(() => {
-        window.location.href = '../../index.php';
-    });
-}
-
-document.getElementById('outAccount').onclick = out;

@@ -19,5 +19,7 @@ if(ini_get("session.use_cookies")){
     );
 }
 
+header('Location: ../../index.php');
+
 //Уничтожаем сессию
 session_destroy();

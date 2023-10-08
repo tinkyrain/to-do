@@ -1,10 +1,11 @@
 <?php
-    session_start();
+session_start();
 
-    //Если пользователь не авторизировался, то перебрасываем его на страницу со входом
-    if(!isset($_SESSION['user_id'])){
-        header('Location: ../../index.php');
-    }
+//Если пользователь не авторизировался, то перебрасываем его на страницу со входом
+if(!isset($_SESSION['user_id'])){
+    header('Location: ../../index.php');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +30,9 @@
         </form>
 
         <section class="col text-center mt-5">
-            <button class="btn btn-danger text-center" id="outAccount" onclick="out()">Выйти из аккаунта</button>
+            <form method="post" action='../../backend/auth/out.php'>
+                <button class="btn btn-danger text-center" type="submit">Выйти из аккаунта</button>
+            </form>
         </section>
 
         <h1 class="text-center mt-5">Задачи</h1>

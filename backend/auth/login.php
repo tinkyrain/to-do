@@ -1,5 +1,7 @@
 <?php
+global $pdo;
 include_once(__DIR__ . '/../connectDB.php');
+include_once(__DIR__ . '/flash.php');
 
 session_start();
 
@@ -11,9 +13,10 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     ]);
 
     //Если ползователей с таким логином не найдено,
-    //То убиваем процесс и отправляем на фронт, что нет пользователей
+    //То убиваем процесс и отправляем, что нет пользователей
     if (!$stmt->rowCount()) {
-        echo 'User not exist';
+        flash('Пользователь с таким логином не найден!');
+        header('Location: ../../index.php');
         die;
     }
 
@@ -33,8 +36,10 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
         $_SESSION['user_id'] = $user['id'];
 
-        echo 'Succses';
-    } else {
-        echo 'Incorrect password';
+        header('Location: ../../frontend/pages/todo.php');
+        die();
     }
+
+    flash('Неверный пароль!');
+    header('Location: ../../index.php');
 }

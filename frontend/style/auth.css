@@ -42,14 +42,6 @@ main {
     }
 }
 
-#regForm {
-    display: none;
-}
-
-#loginForm {
-    display: block;
-}
-
 .form__header-text {
     text-align: center;
 }
@@ -111,4 +103,14 @@ label {
 .registrationLink {
     font-weight: bold;
     cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+.error-text{
+    text-align: center;
+    padding: 10px 0;
+    font-size: 20px;
+    color: red;
+    font-weight: bold;
 }
